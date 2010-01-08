@@ -1,3 +1,4 @@
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__),'lib'))
 require 'rubygems'
 require 'rake'
 
@@ -50,4 +51,16 @@ Rake::RDocTask.new do |rdoc|
   rdoc.title = "mad-statter #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
+namespace :db do
+  namespace :test do
+    require 'test/helper'
+    require 'test/db/migrations/create_statistics'
+    
+    desc "Migrate a test database using the config in test/helper.rb"
+    task :prepare do
+      CreateStatistics.migrate(:up)
+    end
+  end
 end
