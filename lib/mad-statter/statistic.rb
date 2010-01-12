@@ -53,7 +53,13 @@ module MadStatter
     
     # Saves this statistic using the configured storage adapter
     def save
-      self.class.storage_adapter.save_statistic(self)
+      self.class.storage_adapter.save_statistic(
+          self.class.name,
+          scale,
+          time,
+          factor,
+          quantity
+        )
     end
     
   end

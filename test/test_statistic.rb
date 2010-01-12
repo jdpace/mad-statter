@@ -48,8 +48,7 @@ class TestMadStatterStatistic < Test::Unit::TestCase
   context 'When being saved' do
     setup do
       @statistic = MadStatter::Statistic.new
-      MadStatter::Statistic.storage_adapter.expects(:save_statistic).
-        with(@statistic).returns(true)
+      MadStatter::Statistic.storage_adapter.expects(:save_statistic).returns(true)
     end
     
     should 'call the appropriate storage adpaters save_statistic method' do
