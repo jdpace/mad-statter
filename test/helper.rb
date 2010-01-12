@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'test/unit'
+require 'mocha'
 require 'shoulda'
 
 # Load some Rails Essentials before we load MadStatter
