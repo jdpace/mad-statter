@@ -7,11 +7,11 @@ module MadStatter
   end
 
   class Statistic
-    ROLLUP_OPTIONS  = [:sum, :average, :none]
-    RATE_OPTIONS    = [:minute, :hour, :day, :month, :manual]
+    ROLLUPS  = [:sum, :average, :none]
+    RATES    = [:minute, :hour, :day, :month, :manual]
     
-    cattr_reader    :description, :rollup_method, :poll_rate
     cattr_accessor  :storage_adapter
+    class_inheritable_reader    :description, :rollup_method, :poll_rate
     
     attr_accessor :time, :quantity, :factor, :scale
     
@@ -22,14 +22,29 @@ module MadStatter
     
     # Set a detailed description to be used in views and reports
     def self.desc(msg)
-      @@description = msg
+      write_inheritable_attribute :description, msg
     end
 
     # Define the method in which statistics are rolled up
     #
     # Options: :sum, :average, :none
     def self.rollup(meth)
-      @@rollup_method = meth.to_sym if ROLLUP_OPTIONS.include?(meth.to_sym)
+      write_inheritable_attribute(:rollup_method, meth.to_sym) if ROLLUPS.include?(meth.to_sym)
+    end
+    
+    # Meta style method for defining Factors (if any)
+    # Accepts either a regular Enumerabl object or
+    # a proc that will only be called when calling 'factors'
+    def self.has_factors(enum_or_proc)
+      @factors = enum_or_proc
+    end
+    
+    # Returns a set of factors
+    # If no factors were defined returns
+    # an array containing a single nil
+    def self.factors
+      @factors ||= [nil]
+      @factors.respond_to?(:call) ? @factors.call : @factors
     end
 
     # Set the poll rate for this statistic
@@ -41,7 +56,22 @@ module MadStatter
     #
     # If no poll rate is set then polling will be manual
     def self.rate(r)
-      @@poll_rate = r.to_sym if RATE_OPTIONS.include?(r.to_sym)
+      write_inheritable_attribute(:poll_rate, r.to_sym) if RATES.include?(r.to_sym)
+    end
+    
+    # Harvest the statistics across the set factors
+    def self.harvest(poll_time)
+      self.factors.each do |factor|
+        stat = self.new
+        stat.time   = poll_time
+        stat.factor = factor
+        stat.poll!
+      end
+    end
+    
+    def initialize
+      self.scale = self.class.poll_rate
+      self.time  = Time.zone.now
     end
     
     # This method is meant to be overridden by your own
@@ -49,6 +79,13 @@ module MadStatter
     # metric and returning a numeric value to be recorded.
     def poll
       raise NoPollMethodError.new
+    end
+    
+    # Record the result of the poll method and save this stat
+    # using the correct storage adapter
+    def poll!
+      self.quantity = poll
+      self.save
     end
     
     # Saves this statistic using the configured storage adapter
