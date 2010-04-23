@@ -69,6 +69,16 @@ module MadStatter
       end
     end
     
+    # Record all subclasses
+    def self.inherited(subclass)
+      @@subclasses ||= []
+      @@subclasses << subclass
+    end
+    
+    def self.subclasses
+      @@subclasses
+    end
+    
     def initialize
       self.scale = self.class.poll_rate
       self.time  = Time.zone.now

@@ -38,7 +38,7 @@ module MadStatter
     
     # Returns an array of classes that subclass MadStatter::Statistic
     def statistic_klasses
-      @statistic_klasses ||= MadStatter::Statistic.subclasses.map {|klass_name| klass_name.constantize}
+      @statistic_klasses ||= MadStatter::Statistic.subclasses
     end
     
     protected
