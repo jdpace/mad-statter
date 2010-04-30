@@ -38,6 +38,10 @@ module MadStatter
     
     # Returns an array of classes that subclass MadStatter::Statistic
     def statistic_klasses
+      if MadStatter.const_defined?('Railtie') && MadStatter::Railtie.const_defined?('StatisticsRoot')
+        Dir[File.join(MadStatter::Railtie::StatisticsRoot,'*.rb')].each {|file| require file }
+      end
+      
       @statistic_klasses ||= MadStatter::Statistic.subclasses
     end
     

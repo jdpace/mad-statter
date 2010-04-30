@@ -7,7 +7,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "mad-statter"
     gem.summary = %Q{MadStatter: Easy business stats for your rails app}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.description = %Q{Allows you to easily define and track business stats for your app}
     gem.email = "jared@codewordstudios.com"
     gem.homepage = "http://github.com/jdpace/mad-statter"
     gem.authors = ["Jared Pace"]
@@ -25,7 +25,7 @@ end
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
-  test.pattern = 'test/**/test_*.rb'
+  test.pattern = 'test/**/*_test.rb'
   test.verbose = true
 end
 

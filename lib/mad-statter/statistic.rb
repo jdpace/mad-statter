@@ -10,6 +10,8 @@ module MadStatter
     ROLLUPS  = [:sum, :average, :none]
     RATES    = [:minute, :hour, :day, :month, :manual]
     
+    @@subclasses = []
+    cattr_reader    :subclasses
     cattr_accessor  :storage_adapter
     class_inheritable_reader    :description, :rollup_method, :poll_rate
     
@@ -71,12 +73,7 @@ module MadStatter
     
     # Record all subclasses
     def self.inherited(subclass)
-      @@subclasses ||= []
       @@subclasses << subclass
-    end
-    
-    def self.subclasses
-      @@subclasses
     end
     
     def initialize
@@ -100,7 +97,7 @@ module MadStatter
     
     # Saves this statistic using the configured storage adapter
     def save
-      self.class.storage_adapter.save_statistic(
+      self.class.storage_adapter.save(
           self.class.name,
           scale,
           time,

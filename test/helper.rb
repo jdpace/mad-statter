@@ -2,9 +2,10 @@ require 'rubygems'
 require 'test/unit'
 require 'mocha'
 require 'shoulda'
+require 'sqlite3'
 
 # Load some Rails Essentials before we load MadStatter
-RAILS_ROOT = File.join(File.dirname(__FILE__),'..')
+class Rails; def self.root; File.join(File.dirname(__FILE__),'..') end; end
 require 'active_record'
 require 'active_support'
 db_config = {

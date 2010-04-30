@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestMadStatterPoller < Test::Unit::TestCase
+class MadStatterPollerTest < Test::Unit::TestCase
   
   subject { MadStatter::Poller.new(Time.zone.now) }
   

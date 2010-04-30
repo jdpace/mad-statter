@@ -1,6 +1,6 @@
 require 'helper'
 
-class TestMadStatterStatistic < Test::Unit::TestCase
+class MadStatterStatisticTest < Test::Unit::TestCase
   
   subject { MadStatter::Statistic.new }
   
@@ -112,10 +112,10 @@ class TestMadStatterStatistic < Test::Unit::TestCase
   context 'When being saved' do
     setup do
       @statistic = MadStatter::Statistic.new
-      MadStatter::Statistic.storage_adapter.expects(:save_statistic).returns(true)
+      MadStatter::Statistic.storage_adapter.expects(:save).returns(true)
     end
     
-    should 'call the appropriate storage adpaters save_statistic method' do
+    should 'call the appropriate storage adpaters save method' do
       assert @statistic.save
     end
   end
