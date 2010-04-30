@@ -1,6 +1,9 @@
 MadStatter: Simple stats plugin for *Rails 3* apps
 ==================================================
 
+**NOTE:** This project is only partially complete. It still lacks a means to pull
+the statistics and also the charting capability for displaying those statistics.
+
 MadStatter allows you do easily define a number of statistics for your Rails app.
 Stats are essentially classes that define a metric you wish to run against your application
 at a given interval or rate. Anything that can be represented as a numeric value given a 
